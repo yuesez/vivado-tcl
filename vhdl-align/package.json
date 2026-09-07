@@ -1,0 +1,119 @@
+{
+  "name": "vhdl-align",
+  "displayName": "VHDL Align",
+  "description": "Align VHDL by =>, <=, :=, :, -- and keywords (when/else/elsif/then).",
+  "version": "0.0.1",
+  "publisher": "xx260",
+  "repository": { "type": "git", "url": "https://github.com/yuesez/vivado-tcl.git" },
+  "engines": { "vscode": "^1.74.0" },
+  "categories": ["Formatters", "Other"],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:vhdlAlign.align",
+    "onCommand:vhdlAlign.alignDocument",
+    "onCommand:vhdlAlign.translateComments"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "vhdlAlign.align",
+        "title": "Align Block",
+        "category": "VHDL"
+      },
+      {
+        "command": "vhdlAlign.alignDocument",
+        "title": "Align Whole Document",
+        "category": "VHDL"
+      },
+      {
+        "command": "vhdlAlign.translateComments",
+        "title": "Translate Comments (中 ↔ EN)",
+        "category": "VHDL"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "vhdlAlign.align",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "vhdlAlign.alignDocument",
+        "key": "ctrl+alt+shift+a",
+        "mac": "cmd+alt+shift+a",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "vhdlAlign.align",
+          "when": "editorLangId == vhdl || resourceExtname =~ /\\.vhd$/",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "vhdlAlign.alignDocument",
+          "when": "editorLangId == vhdl || resourceExtname =~ /\\.vhd$/",
+          "group": "1_modification@2"
+        },
+        {
+          "command": "vhdlAlign.translateComments",
+          "when": "editorHasSelection && (editorLangId == vhdl || resourceExtname =~ /\\.vhd$/)",
+          "group": "1_modification@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "VHDL Align",
+      "properties": {
+        "vhdlAlign.anchors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [":=", "=>", "<=", ":", "when", "else", "elsif", "then", "--"],
+          "description": "对齐锚点，按从左到右顺序串行对齐。可含符号(:= => <= -- :)与关键字(when else elsif then)。顺序影响多列对齐结果。"
+        },
+        "vhdlAlign.minLines": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 2,
+          "description": "块内至少有这么多行含该锚点才对齐，避免单行无意义对齐。"
+        },
+        "vhdlAlign.tabSize": {
+          "type": "integer",
+          "default": 4,
+          "minimum": 1,
+          "description": "缩进统一为多少空格：tab 按此展开为空格，默认4，不依赖编辑器 tabSize。"
+        },
+        "vhdlAlign.translateProvider": {
+          "type": "string",
+          "enum": ["baidu", "youdao"],
+          "default": "baidu",
+          "description": "注释翻译引擎：baidu（百度翻译，标准版每月约5万字符免费，QPS=1，自动退避重试）或 youdao（有道智云，已无免费额度，仅作备选）。"
+        },
+        "vhdlAlign.baiduAppid": {
+          "type": "string",
+          "default": "",
+          "description": "百度翻译开放平台 APP ID。前往 https://fanyi-api.baidu.com/ 登录进入“管理控制台”开通“通用翻译API”获取（标准版免费）。注释文本会发送到百度服务器翻译。"
+        },
+        "vhdlAlign.baiduKey": {
+          "type": "string",
+          "default": "",
+          "description": "百度翻译开放平台 密钥(Secret Key)，与 APP ID 配套。签名规则 md5(appid+q+salt+密钥)。"
+        },
+        "vhdlAlign.youdaoAppKey": {
+          "type": "string",
+          "default": "",
+          "description": "（备选引擎，需 vhdlAlign.translateProvider=youdao）有道智云翻译 应用ID(appKey)。前往 https://ai.youdao.com/ 创建文本翻译应用获取。注释文本会发送到有道服务器翻译。"
+        },
+        "vhdlAlign.youdaoSecret": {
+          "type": "string",
+          "default": "",
+          "description": "（备选引擎，需 vhdlAlign.translateProvider=youdao）有道智云翻译 应用密钥(secret)。与应用ID配套。"
+        }
+      }
+    }
+  },
+  "scripts": {},
+  "devDependencies": {}
+}
