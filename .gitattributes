@@ -1,0 +1,2 @@
+# 批处理文件固定 CRLF（Windows cmd 依赖），禁用换行转换
+*.bat text eol=crlf
