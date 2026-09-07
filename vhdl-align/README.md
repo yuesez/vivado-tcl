@@ -8,6 +8,7 @@
 |------|--------|------|
 | `VHDL: Align Block` | `Ctrl+Alt+A` | 对齐选区；无选区时对齐光标所在连续非空块 |
 | `VHDL: Align Whole Document` | `Ctrl+Alt+Shift+A` | 对齐整个文件（按空行分块，块内独立对齐） |
+| `VHDL: Translate Comments (中 ↔ EN)` | — | 翻译选区内 `--` 注释（中英互译，需先配置凭据，见下） |
 
 命令面板（`Ctrl+Shift+P`）输入 `VHDL` 即可看到。
 
@@ -50,6 +51,30 @@ clka   => ui_clk,
 wea(0) => '1',
 addra  => status_addra,
 ```
+
+## 注释翻译（Translate Comments，中 ↔ 英）
+
+右键菜单 **Translate Comments (中 ↔ EN)** 或命令面板执行：把**选中区域**每一行里的 `--` 注释原位翻译并替换，中英互译方向自动判断（注释含中文 → 译成英文；不含中文 → 译成中文）。
+
+- 整行注释与行内注释（代码之后的 `--`）都会处理，代码本身不动；
+- **被注释掉的 VHDL 代码**行（如 `-- a <= b;`、`-- u_x : entity ...`）与**纯装饰分隔线**（`----` / `====` 等）自动跳过，避免破坏语义；
+- 引擎默认**百度**：`vhdlAlign.translateProvider = baidu`，百度翻译开放平台标准版每月约 5 万字符免费、QPS=1，命中限频自动退避重试（最多 3 次）；备选**有道**：`youdao`（需自行开通，无免费额度）；
+- 翻译耗时逐条进行，VS Code 状态栏显示进度，完成后提示翻译/失败行数。
+
+### 配置凭据（settings.json）
+
+```json
+"vhdlAlign.translateProvider": "baidu",   // baidu | youdao
+"vhdlAlign.baiduAppid": "",
+"vhdlAlign.baiduKey": "",
+"vhdlAlign.youdaoAppKey": "",
+"vhdlAlign.youdaoSecret": ""
+```
+
+- 百度凭据：https://fanyi-api.baidu.com/ 登录控制台 → 开通"通用翻译 API"（标准版免费）获取 APP ID 与密钥；
+- 有道凭据：https://ai.youdao.com/ 创建"文本翻译"应用获取 appKey 与 secret；
+- 未配置对应凭据就执行会弹出提示，不会发送请求；
+- **注意**：翻译时选中的注释文本会发送到所选翻译服务器（百度/有道）进行翻译。
 
 ## 安装/卸载
 
