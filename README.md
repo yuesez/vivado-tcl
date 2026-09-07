@@ -1,2 +1,2 @@
-# vivado-tcl
-vivado的一些脚本
+# vscode scripts
+vscode插件的一些脚本
